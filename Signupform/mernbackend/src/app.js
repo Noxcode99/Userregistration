@@ -28,6 +28,10 @@ app.get("/register", (req, res) => {
     res.render("register");
 })
 
+app.get("/login", (req, res) => {
+    res.render("login");
+})
+
 // create a new user in our database 
 app.post("/register", async (req, res) => {
   try{
@@ -57,6 +61,26 @@ app.post("/register", async (req, res) => {
   } catch(error) {
      res.status(400).send(error);
   }
+})
+
+// login check
+app.post("/login", async (req, res) => {
+   try{
+
+   const email = req.body.email;
+   const password = req.body.password;
+ 
+   const useremail = await Register.findOne({email:email});
+   
+   if(useremail.password === password){
+     res.status(201).render("index");
+   }else{
+     res.send("login details are invalid!");
+   }
+
+   }catch(error){
+    res.status(400).send("login details are invalid!");
+   }
 })
 
 app.listen(port, () => {
